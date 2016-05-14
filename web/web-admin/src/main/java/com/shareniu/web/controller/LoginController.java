@@ -10,8 +10,6 @@ import com.shareniu.user.service.UserService;
 
 /**
  * 
- * @创建时间: 2015-1-25,下午7:50:22 .
- * @版本号: V1.0 .
  */
 @Controller
 public class LoginController{
