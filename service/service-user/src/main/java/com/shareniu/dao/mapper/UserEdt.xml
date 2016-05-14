@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shareniu.dao.mapper.UserEdt">
+
+	<sql id="where-all-condition">
+		<if test="id != null">
+			AND ID = #{id}
+		</if>
+		<if test="username != null and username != ''">
+			AND USERNAME = #{username}
+		</if>
+		<if test="password != null and password != ''">
+			AND PASSWORD = #{password}
+		</if>
+		<if test="mobileno != null and mobileno != ''">
+			AND MOBILENO = #{mobileno}
+		</if>
+		<if test="email != null and email != ''">
+			AND EMAIL = #{email}
+		</if>
+		<if test="satatus != null">
+			AND SATATUS = #{satatus}
+		</if>
+		<if test="usertype != null and usertype != ''">
+			AND USERTYPE = #{usertype}
+		</if>
+		<if test="salt != null and salt != ''">
+			AND SALT = #{salt}
+		</if>
+	</sql>
+
+	<!-- insert record -->
+	<insert id="insertTUser"
+		parameterType="com.shareniu.dao.entity.UserEntity">
+		<selectKey resultType="java.math.BigInteger" order="AFTER"
+			keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO t_user (
+		ID,
+		USERNAME,
+		PASSWORD,
+		MOBILENO,
+		EMAIL,
+		SATATUS,
+		USERTYPE,
+		SALT
+		) VALUES (
+		#{id} ,
+		#{username} ,
+		#{password} ,
+		#{mobileno} ,
+		#{email} ,
+		#{satatus} ,
+		#{usertype} ,
+		#{salt}
+		)
+	</insert>
+
+	<!-- update record -->
+	<update id="updateTUserByPrimaryKey"
+		parameterType="com.shareniu.dao.entity.UserEntity">
+		UPDATE t_user
+		<set>
+			<if test="username != null">
+				USERNAME = #{username} ,
+			</if>
+			<if test="password != null">
+				PASSWORD = #{password} ,
+			</if>
+			<if test="mobileno != null">
+				MOBILENO = #{mobileno} ,
+			</if>
+			<if test="email != null">
+				EMAIL = #{email} ,
+			</if>
+			<if test="satatus != null">
+				SATATUS = #{satatus} ,
+			</if>
+			<if test="usertype != null">
+				USERTYPE = #{usertype} ,
+			</if>
+			<if test="salt != null">
+				SALT = #{salt}
+			</if>
+		</set>
+		WHERE ID = #{id}
+
+	</update>
+
+
+	<!-- delete record -->
+	<delete id="deleteTUser"
+		parameterType="com.shareniu.dao.entity.UserEntity">
+		DELETE FROM t_user
+		WHERE 1=1
+		<include refid="where-all-condition" />
+	</delete>
+
+	<!-- delete record -->
+	<delete id="deleteByPrimaryKey" parameterType="java.math.BigInteger">
+		DELETE FROM t_user
+		WHERE ID = #{id}
+	</delete>
+
+</mapper>

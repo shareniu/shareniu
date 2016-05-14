@@ -1,0 +1,64 @@
+.main{  
+  
+ clear:both;  
+  
+ padding:8px;  
+  
+ text-align:center;  
+  
+}  
+  
+/*第一种形式*/  
+  
+#tabs0 {  
+  
+ height: 800px;  
+  
+ width: 1000px;  
+  
+ border: 1px solid #cbcbcb;  
+  
+ background-color: #FFFFFF;  
+  
+}  
+  
+.menu0{  
+  
+ width: 600px;  
+  
+}  
+  
+.menu0 li{  
+ display:block;  
+  
+ float: left;  
+  
+ padding: 4px 0;  
+  
+ width:150px;  
+  
+ text-align: center;  
+  
+ cursor:pointer;  
+  
+ background: #F6F6F6;  
+  
+}  
+  
+.menu0 li.hover{  
+  
+ background: #FFFFff;  
+  
+}  
+  
+#main0 ul{  
+  
+ display: none;  
+  
+}  
+  
+#main0 ul.block{  
+  
+ display: block;  
+  
+}  

@@ -1,0 +1,87 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd 
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.2.xsd 
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-3.2.xsd 
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-3.2.xsd ">
+	<!-- 加载 service 要扫描的包 -->
+<!-- 	<context:component-scan base-package="com.ybwl.controller"></context:component-scan>
+ -->	<context:component-scan base-package="com.ybwl" />
+	<mvc:annotation-driven/>
+	
+	<!-- 视图解析器 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+	
+	<!-- 静态资源映射目录 -->
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+	
+
+	<!-- 数据源配置方式1:导入JDBC属性文件 -->
+	<context:property-placeholder location="classpath:jdbc.properties" ignore-unresolvable="true"/>
+	<!-- 数据库 --> 
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">  
+			<property name="driverClassName" 	value="${jdbc.driverClassName}" />
+			<property name="url" 				value="${jdbc.url}" />
+			<property name="username" 			value="${jdbc.username}" />
+			<property name="password" 			value="${jdbc.password}" />
+	</bean> 
+		<!-- 配置sqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" >
+		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml"></property>
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+		<!-- 通过扫描的模式,自动注入bean -->
+    <bean name="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.ybwl.dao.mapper" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	</bean>
+	
+	
+	
+	
+	
+	<tx:annotation-driven transaction-manager="txManager" />
+    <!-- spring管理事务 -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- 设置与事务有关的各种属性  -->
+ 	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="insert*"  propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="add*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="update*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="del*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="save*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="remove*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="select*"  propagation="SUPPORTS"/>
+			<tx:method name="get*"  propagation="SUPPORTS"/>
+			<tx:method name="find*"  propagation="SUPPORTS"/>
+			<tx:method name="query*"  propagation="SUPPORTS"/>
+			<tx:method name="*" propagation="SUPPORTS" />
+			<tx:method name="distribution*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="shelfGoods" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="sortByOrdinal" propagation="REQUIRED" rollback-for="Exception" />
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- 声明切入点 -->
+	<aop:config >
+		<aop:pointcut id="loginPointCuts" expression="execution(* com.ybwl.service..*.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="loginPointCuts" />
+	</aop:config>
+	
+</beans>

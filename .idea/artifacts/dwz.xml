@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="dwz">
+    <output-path>$PROJECT_DIR$/out/artifacts/dwz</output-path>
+    <root id="root" />
+  </artifact>
+</component>

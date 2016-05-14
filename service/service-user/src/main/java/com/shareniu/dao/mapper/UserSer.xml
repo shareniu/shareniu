@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shareniu.dao.mapper.UserSer">
+	<resultMap id="tUserMapResult" type="com.shareniu.dao.entity.UserEntity">
+		<result column="ID" property="id" />
+		<result column="USERNAME" property="username" />
+		<result column="PASSWORD" property="password" />
+		<result column="MOBILENO" property="mobileno" />
+		<result column="EMAIL" property="email" />
+		<result column="SATATUS" property="satatus" /> <!-- 状态 -->
+		<result column="USERTYPE" property="usertype" />
+		<result column="SALT" property="salt" />
+	</resultMap>
+
+	<sql id="select-all-column">
+		ID ,
+		USERNAME ,
+		PASSWORD ,
+		MOBILENO ,
+		EMAIL ,
+		SATATUS ,
+		USERTYPE ,
+		SALT
+	</sql>
+
+	<sql id="where-all-page-condition">
+		<if test="f.id != null">
+			AND ID = #{f.id}
+		</if>
+		<if test="f.username != null and f.username != ''">
+			AND USERNAME = #{f.username}
+		</if>
+		<if test="f.password != null and f.password != ''">
+			AND PASSWORD = #{f.password}
+		</if>
+		<if test="f.mobileno != null and f.mobileno != ''">
+			AND MOBILENO = #{f.mobileno}
+		</if>
+		<if test="f.email != null and f.email != ''">
+			AND EMAIL = #{f.email}
+		</if>
+		<if test="f.satatus != null">
+			AND SATATUS = #{f.satatus}
+		</if>
+		<if test="f.usertype != null and f.usertype != ''">
+			AND USERTYPE = #{f.usertype}
+		</if>
+		<if test="f.salt != null and f.salt != ''">
+			AND SALT = #{f.salt}
+		</if>
+	</sql>
+
+	<sql id="where-all-condition">
+		<if test="id != null">
+			AND ID = #{id}
+		</if>
+		<if test="username != null and username != ''">
+			AND USERNAME = #{username}
+		</if>
+		<if test="password != null and password != ''">
+			AND PASSWORD = #{password}
+		</if>
+		<if test="mobileno != null and mobileno != ''">
+			AND MOBILENO = #{mobileno}
+		</if>
+		<if test="email != null and email != ''">
+			AND EMAIL = #{email}
+		</if>
+		<if test="satatus != null">
+			AND SATATUS = #{satatus}
+		</if>
+		<if test="usertype != null and usertype != ''">
+			AND USERTYPE = #{usertype}
+		</if>
+		<if test="salt != null and salt != ''">
+			AND SALT = #{salt}
+		</if>
+	</sql>
+
+	<!-- query list with page -->
+	<select id="selectTUserListByPageCond" resultMap="tUserMapResult">
+		SELECT
+		<include refid="select-all-column" />
+		FROM t_user WHERE 1=1
+		<include refid="where-all-page-condition" />
+		LIMIT
+		#{beginCount},#{pageRows}
+	</select>
+
+	<!-- query list count -->
+	<select id="selectTUserListTotalCount" resultType="int">
+		SELECT COUNT(ID)
+		FROM t_user
+		WHERE 1=1
+		<include refid="where-all-page-condition" />
+	</select>
+
+	<!-- query list without page -->
+	<select id="selectTUserListByCond" resultMap="tUserMapResult">
+		SELECT
+		<include refid="select-all-column" />
+		FROM t_user WHERE 1=1
+		<include refid="where-all-condition" />
+	</select>
+
+	<!-- query record -->
+	<select id="selectTUserByCond" resultMap="tUserMapResult">
+		SELECT
+		<include refid="select-all-column" />
+		FROM t_user WHERE 1=1
+		<include refid="where-all-condition" />
+		LIMIT 1
+	</select>
+
+</mapper>
