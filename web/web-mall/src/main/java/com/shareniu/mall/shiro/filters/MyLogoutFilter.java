@@ -18,7 +18,7 @@ public class MyLogoutFilter extends LogoutFilter {
 
     private RedisSessionManager redisSessionManager;
 
-    /** JSESSIONID COOKIE名称 */
+    /** JSESSIONID COOKIE名称2 */
     private static final String JSESSIONID_COOKIE_NAME = "userSessionId";
 
     @Override
