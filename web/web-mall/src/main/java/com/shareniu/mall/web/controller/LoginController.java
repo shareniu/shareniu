@@ -1,13 +1,22 @@
 package com.shareniu.mall.web.controller;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.shareniu.common.utils.WebUtils;
+import com.shareniu.mall.shiro.user.Principal;
+import com.shareniu.user.po.UserPo;
+import com.shareniu.user.service.UserService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.shareniu.user.po.UserPo;
-import com.shareniu.user.service.UserService;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -18,45 +27,99 @@ import com.shareniu.user.service.UserService;
 public class LoginController{
 	@Autowired
 	private UserService userService;
-
-
 	/**
-	 * 进入登录页面.
-	 * 
-	 * @return
+	 * 登录
 	 */
-	@RequestMapping("/loginPage")
-	public String loginPage() {
+	@RequestMapping("/login")
+	public String login(String ReturnUrl, HttpServletRequest request,
+						HttpServletResponse response) {
+		Subject subject = SecurityUtils.getSubject();
+		if (subject.isAuthenticated()) {
+			if (ReturnUrl == null || ReturnUrl.equals("")) {
+				return "index/main";
+			}
+			return ReturnUrl;
+		} else {
+			return "error";
+		}
+	}
+	@RequestMapping("/logout")
+	public String logOut() {
+		Subject subject = SecurityUtils.getSubject();
+		subject.logout();
 		return "login";
 	}
 
 	/**
-	 * 登录验证Action
-	 * 
+	 * 是否登录
+	 *
+	 * @param request
 	 * @return
-	 * @throws Exception
 	 */
-	@RequestMapping("/userLogin")
-	public String userLogin(UserPo user) {
-		try {
-			
-
-		} catch (RuntimeException e) {
-			return "input";
-		} catch (Exception e) {
-			return "input";
+	@RequestMapping("/isLogin")
+	@ResponseBody
+	public Object isLogin(HttpServletRequest request) {
+		boolean isAuthenticated = SecurityUtils.getSubject().isAuthenticated();
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> identify = new HashMap<String, Object>();
+		String name = WebUtils.getCookie(request, "mallUser");
+		if (name == null) {
+			name = "";
+		} else {
+			try {
+				name = URLDecoder.decode(name, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				name = "";
+			}
 		}
-		return "index";
+		String unick = WebUtils.getCookie(request, "userNick");
+		if (unick == null) {
+			unick = "";
+		} else {
+			try {
+				unick = URLDecoder.decode(unick, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				unick = "";
+			}
+		}
+		String userPin = WebUtils.getCookie(request, "userPin");
+		if (userPin == null) {
+			userPin = "";
+		} else {
+			try {
+				userPin = URLDecoder.decode(userPin, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				userPin = "";
+			}
+		}
+		identify.put("Unick", unick);
+		identify.put("Name", name);
+		identify.put("UserPin", userPin);
+		identify.put("IsAuthenticated", isAuthenticated);
+		map.put("Identity", identify);
+		return map;
 	}
 
+	@RequestMapping("/getUserPo")
+	public @ResponseBody UserPo getUserPo() {
+		Subject subject = SecurityUtils.getSubject();
+		if (subject != null) {
+			Principal principal = (Principal) subject.getPrincipal();
+			if (principal != null) {
+				UserPo user = new UserPo();
+				return user;
+			}
+		}
+		return null;
+	}
 	/**
-	 * 退出登录
-	 * 
+	 * 弹出登陆框
+	 *
+	 * @author liuqian
 	 * @return
-	 * @throws Exception
 	 */
-	@RequestMapping("/logout")
-	public String logout() throws Exception {
-		return "logout";
+	@RequestMapping("/showLogin")
+	public String showLogin() {
+		return "index/login_box";
 	}
 }

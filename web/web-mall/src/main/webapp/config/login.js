@@ -34,7 +34,6 @@ function login() {
 	var $username = $("input[name=username]");
 	var $password = $("input[name=password]");
 	$.ajax({
-		url: "<%=base%>/login.jsp",
 		type: "POST",
 		data: {
 			username: $username.val(),
@@ -75,62 +74,10 @@ document.onkeydown = function(e){
 
 $(document).ready(function() {
     createCode();
-	$(".i-text").focus(function() {
-		$(this).addClass('h-light');
-	});
-
-	$(".i-text").focusout(function() {
-		$(this).removeClass('h-light');
-	});
-
-	$("#username").focus(function() {
-		var username = $(this).val();
-		if (username == '输入账号') {
-			$(this).val('');
-		}
-	});
-
-	$("#username").focusout(function() {
-		var username = $(this).val();
-		if (username == '') {
-			$(this).val('输入账号');
-		}
-	});
-
-	$("#password").focus(function() {
-		var username = $(this).val();
-		if (username == '输入密码') {
-			$(this).val('');
-		}
-	});
-
-	$("#valid").focus(function() {
-		var username = $(this).val();
-		if (username == '输入验证码') {
-			$(this).val('');
-		}
-	});
-
-	$("#valid").focusout(function() {
-		var username = $(this).val();
-		if (username == '') {
-			$(this).val('输入验证码');
-		}
-	});
-
-	$(".registerform").Validform( {
-		tiptype : function(msg, o, cssctl) {
-			var objtip = $(".error-box");
-			cssctl(objtip, o.type);
-			objtip.text(msg);
-		},
-		ajaxPost : true
-	});
 	//验证码生成
 		$("#validArea").click(function() {
 			createCode();
 		});
-
 });
 
 
