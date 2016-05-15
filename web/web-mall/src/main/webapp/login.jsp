@@ -14,46 +14,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
-	<!--
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	-->
-
 <link href="<%=basePath%>css/login.css" rel="stylesheet" rev="stylesheet" type="text/css" media="all" />
 <link href="<%=basePath%>css/demo.css" rel="stylesheet" rev="stylesheet" type="text/css" media="all" />
-
 <script type="text/javascript" language="javascript" src="<%=basePath%>config/js/jquery-1.7.2.js"></script>
-<!--<script type="text/javascript" language="javascript" src="<%=basePath%>config/js/jquery.SuperSlide.js"></script>
-<script type="text/javascript" language="javascript" src="<%=basePath%>config/js/Validform_v5.3.2_min.js"></script>
+<script type="text/javascript" language="javascript" src="<%=basePath%>js/login.js"></script>
 
---><script type="text/javascript" language="javascript" src="<%=basePath%>js/login.js"></script>
-<style type="text/css">
-<!--
-#Layer1 {
-	position:absolute;
-	z-index:3;
-	left: 126px;
-	top: 27px;
-	width:113px;
-	height:37px;
-	background-color:#FFFFFF;
-	color:red;
-	font-size:26px;
-	font-weight:bold;
-	cursor:pointer;
-	letter-spacing:8px;
-}
--->
-</style>
   </head>
   
   <body>
 
 <div class="header">
   <h1 class="headerLogo"><a title="后台管理系统" target="_blank" href=""><img alt="logo" src="images/logo.gif"></a></h1>
-	<div class="headerNav"><!--
-		<a target="_blank" href="">万利官网</a>
-
-	--></div>
+	<div class="headerNav"></div>
 </div>
 
 <div class="banner">

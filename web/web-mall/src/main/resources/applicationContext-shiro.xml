@@ -38,7 +38,7 @@
     <property name="userProvider" ref="userProviderImpl"/>
   </bean>
 
-  <bean class="com.shareniu.mall.shiro.filter.AuthenticationFilter" id="formAuthenticationFilter">
+  <bean class="com.shareniu.mall.shiro.filters.AuthenticationFilter" id="formAuthenticationFilter">
     <property name="usernameParam" value="username"/>
     <property name="passwordParam" value="password"/>
     <property name="callbackKeyAttribute" value="ReturnUrl"/>
@@ -75,18 +75,14 @@
   </bean>
 
 
-<bean class="com.shareniu.mall.shiro.redis.RedisSessionDao" id="sessionDAO">
+  <bean class="com.shareniu.mall.shiro.redis.RedisSessionDao" id="sessionDAO">
     <property name="sessionIdGenerator" ref="sessionIdGenerator"/>
     <property name="cacheManager" ref="redisCacheManager"/>
   </bean>
 
   <bean class="com.shareniu.mall.shiro.redis.RedisCacheManager" id="redisCacheManager">
     <property name="expire" value="1800000"/>
-    <property name="redisManager" ref="redisManager"/>
-  </bean>
-
-  <bean class="com.shareniu.mall.shiro.redis.DefaultRedisManager" id="redisManager">
-    <property name="pool" ref="jedisPool"/>
+    <property name="redisClientTemplate" ref="redisClientTemplateImpl"/>
   </bean>
 
   <bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>
@@ -96,7 +92,7 @@
     <property name="arguments" ref="securityManager"/>
   </bean>
 
-  <bean id="logoutFilter" class="com.shareniu.mall.shiro.filter.MyLogoutFilter">
+  <bean id="logoutFilter" class="com.shareniu.mall.shiro.filters.MyLogoutFilter">
     <property name="redirectUrl" value="/index/main.html"/>
     <property name="redisSessionManager" ref="redisSessionMangerImpl"/>
   </bean>

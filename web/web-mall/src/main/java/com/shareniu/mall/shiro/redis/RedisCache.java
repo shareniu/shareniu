@@ -1,10 +1,4 @@
-package com.shareniu.common.redis;
-
-import com.shareniu.common.utils.SerializeUtils;
-import org.apache.shiro.cache.Cache;
-import org.apache.shiro.cache.CacheException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package com.shareniu.mall.shiro.redis;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -13,6 +7,14 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.apache.shiro.cache.Cache;
+import org.apache.shiro.cache.CacheException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.shareniu.common.cache.redis.RedisClientTemplate;
+import com.shareniu.mall.shiro.utils.SerializeUtils;
 
 /**
  * @author zyw
@@ -26,7 +28,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
     /**
      * redis 操作对象
      */
-    private RedisManager redisManager;
+    private RedisClientTemplate redisClientTemplate;
 
     /**
      * 过期时间，秒，设置次值的时候请使用毫秒
@@ -36,8 +38,8 @@ public class RedisCache<K, V> implements Cache<K, V> {
     public RedisCache() {
     }
 
-    public RedisCache(RedisManager redisManager, int expire, String keyPrefix) {
-        this.redisManager = redisManager;
+    public RedisCache(RedisClientTemplate redisClientTemplate, int expire, String keyPrefix) {
+        this.redisClientTemplate = redisClientTemplate;
         this.keyPrefix = keyPrefix;
         this.expire = expire / 1000;
     }
@@ -73,7 +75,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
             if (key == null) {
                 return null;
             } else {
-                byte[] rawValue = redisManager.get(getByteKey(key));
+                byte[] rawValue = redisClientTemplate.get(getByteKey(key));
                 return (V) SerializeUtils.deserialize(rawValue);
             }
         } catch (Throwable t) {
@@ -93,7 +95,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
     public V put(K key, V value) throws CacheException {
         logger.debug("根据key从存储 key [" + key + "]");
         try {
-            redisManager.set(getByteKey(key), SerializeUtils.serialize(value), this.expire);
+        	redisClientTemplate.set(getByteKey(key), SerializeUtils.serialize(value), this.expire);
             return value;
         } catch (Throwable t) {
             throw new CacheException(t);
@@ -112,7 +114,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
         logger.debug("从redis中删除 key [" + key + "]");
         try {
             V previous = get(key);
-            redisManager.del(getByteKey(key));
+            redisClientTemplate.del(getByteKey(key));
             return previous;
         } catch (Throwable t) {
             throw new CacheException(t);
@@ -128,7 +130,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
     public void clear() throws CacheException {
         logger.debug("从redis中删除所有元素");
         try {
-            redisManager.flushDb(this.keyPrefix.getBytes(charset));
+        	redisClientTemplate.flushDb(this.keyPrefix.getBytes(charset));
         } catch (Throwable t) {
             throw new CacheException(t);
         }
@@ -142,7 +144,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
     @Override
     public int size() {
         try {
-            Long longSize = redisManager.dbSize(this.keyPrefix.getBytes(charset));
+            Long longSize = redisClientTemplate.dbSize(this.keyPrefix.getBytes(charset));
             return longSize.intValue();
         } catch (Throwable t) {
             throw new CacheException(t);
@@ -157,7 +159,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
     @Override
     public Set<K> keys() {
         try {
-            Set<byte[]> keys = redisManager.keys(this.keyPrefix.getBytes(charset));
+            Set<byte[]> keys = redisClientTemplate.keys(this.keyPrefix.getBytes(charset));
             if (keys == null || keys.isEmpty()) {
                 return Collections.emptySet();
             }
@@ -182,7 +184,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
     @Override
     public Collection<V> values() {
         try {
-            Set<byte[]> values = redisManager.values(this.keyPrefix.getBytes(charset));
+            Set<byte[]> values = redisClientTemplate.values(this.keyPrefix.getBytes(charset));
             if (values == null || values.isEmpty()) {
                 return Collections.emptySet();
             }
@@ -205,8 +207,8 @@ public class RedisCache<K, V> implements Cache<K, V> {
      *
      * @param redisManager New value of redis 操作对象.
      */
-    public void setRedisManager(RedisManager redisManager) {
-        this.redisManager = redisManager;
+    public void setRedisClientTemplate(RedisClientTemplate redisClientTemplate) {
+        this.redisClientTemplate = redisClientTemplate;
     }
 
     /**
@@ -214,8 +216,8 @@ public class RedisCache<K, V> implements Cache<K, V> {
      *
      * @return Value of redis 操作对象.
      */
-    public RedisManager getRedisManager() {
-        return redisManager;
+    public RedisClientTemplate getRedisClientTemplate() {
+        return redisClientTemplate;
     }
 
     /**

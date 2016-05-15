@@ -1,10 +1,12 @@
-package com.shareniu.common.redis;
+package com.shareniu.mall.shiro.redis;
 
 import org.apache.shiro.cache.AbstractCacheManager;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.shareniu.common.cache.redis.RedisClientTemplate;
 
 /**
  * @author zyw
@@ -18,7 +20,7 @@ public class RedisCacheManager extends AbstractCacheManager {
 
     private String keyPrefix = "shiro_redis_cache:";
 
-    private RedisManager redisManager;
+    private RedisClientTemplate redisClientTemplate;
 
     private int expire;
 
@@ -33,7 +35,7 @@ public class RedisCacheManager extends AbstractCacheManager {
     @Override
     protected Cache createCache(String name) throws CacheException {
         logger.debug("create cache of name = {}", name);
-        return new RedisCache(redisManager, expire, keyPrefix);
+        return new RedisCache(redisClientTemplate, expire, keyPrefix);
     }
 
     /**
@@ -50,8 +52,8 @@ public class RedisCacheManager extends AbstractCacheManager {
      *
      * @return Value of redisManager.
      */
-    public RedisManager getRedisManager() {
-        return redisManager;
+    public RedisClientTemplate getRedisClientTemplate() {
+        return redisClientTemplate;
     }
 
     /**
@@ -68,8 +70,8 @@ public class RedisCacheManager extends AbstractCacheManager {
      *
      * @param redisManager New value of redisManager.
      */
-    public void setRedisManager(RedisManager redisManager) {
-        this.redisManager = redisManager;
+    public void setRedisClientTemplate(RedisClientTemplate redisClientTemplate) {
+        this.redisClientTemplate = redisClientTemplate;
     }
 
     /**

@@ -1,5 +1,80 @@
+var $isRememberUsername = $("#isRememberUsername");
+$().ready( function() {
+	var $username = $("#username");
+	var $password = $("#password");
+	// 记住用户名
+	if(getCookie("mallUser") != null) {
+		$isRememberUsername.prop("checked", true);
+		$username.val(getCookie("mallUser"));
+		$password.focus();
+	} else {
+		$isRememberUsername.prop("checked", false);
+		$username.focus();
+	}
+});
+
+$(function(){
+	var username = getCookie('mallUser');
+	if(username) {
+		$('username').val(username);
+	}
+});
+//登录
+function login() {
+	$(".errorTipTxt").html("");
+	if($("#username").val() == "") {
+        alert("请输入用户名");
+		return;
+	}
+	if($("#password").val() == "") {
+		alert("请输入密码");
+		return;
+	}
+	//登录提交
+	var $username = $("input[name=username]");
+	var $password = $("input[name=password]");
+	$.ajax({
+		url: "<%=base%>/login.jsp",
+		type: "POST",
+		data: {
+			username: $username.val(),
+			password: $password.val()
+		},
+		dataType: "json",
+		cache: false,
+		success: function(result) {
+			if(result.loginStatus=="success") {
+				if ($isRememberUsername.prop("checked")) {
+					addCookie("mallUser", $username.val(), {expires: 7 * 24 * 60 * 60});
+				} else {
+					removeCookie("mallUser");
+				}
+				location.href="<%=base%>"+result.ReturnUrl;
+			} else {
+				$("#login_err").html("用户名或密码不正确").addClass("vShow");
+			}
+		}
+	});
+}
+
+function loginCallback() {
+	$('#callback').attr('name', 'callback');
+	login();
+}
+
+document.onkeydown = function(e){
+	if(!e) e = window.event;//火狐中是 window.event
+	if((e.keyCode || e.which) == 13){
+		login();
+	}
+}
+
+
+
+
+
 $(document).ready(function() {
-createCode();
+    createCode();
 	$(".i-text").focus(function() {
 		$(this).addClass('h-light');
 	});

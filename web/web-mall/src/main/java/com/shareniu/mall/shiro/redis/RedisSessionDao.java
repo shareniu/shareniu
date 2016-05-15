@@ -1,4 +1,4 @@
-package com.shareniu.common.redis;
+package com.shareniu.mall.shiro.redis;
 
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.CachingSessionDAO;

@@ -7,9 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.web.filter.authc.LogoutFilter;
 
+import com.shareniu.common.cache.redis.RedisSessionManager;
 import com.shareniu.common.utils.WebUtils;
 import com.shareniu.user.po.UserPo;
-import com.shareniu.common.redis.RedisSessionManager;;
 
 /**
  * Created by wzy on 2015/4/8.
