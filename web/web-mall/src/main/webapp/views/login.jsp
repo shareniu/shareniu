@@ -17,6 +17,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="<%=basePath%>config/common.js"></script>
 <script type="text/javascript"  src="<%=basePath%>config/jquery-1.7.2.js"></script>
 <script type="text/javascript" src="<%=basePath%>config/login.js"></script>
+      <script type="text/javascript">
+          var mdmall = {
+              base: "<%=basePath%>",
+              tokenName: "mdtoken",
+              isAjaxSend: "isAjaxSend"
+          };
+      </script>
   </head>
   
   <body>
@@ -62,7 +69,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </div>
   
   </form>
-  
+
   </div>
 
 </div>

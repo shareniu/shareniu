@@ -1,9 +1,17 @@
-//用户pin\登录状态
-var checkUserLoginState = function(cb) {
-    if (typeof cb !== 'function' ) { return; }
-    $.post(mdmall.base + '/common/isLogin.aj', function(r) {
-        if (r.Identity) {
-            cb(r.Identity);
+//用户pin\登录状态cb为方法参数，baseUrl为值参数
+var checkUserLoginState = function(cb,baseUrl) {
+    if (typeof cb !== 'function' ) { return;}
+    $.ajax({
+        type:"post",
+        url:baseUrl + "/isLogin.htm",
+        contentType:"application/json;charset=utf-8",
+        success:function(data) {
+            if (data.Identity) {
+                cb(data.Identity);
+            }
+        },
+        error:function(data){
+            alert(1);
         }
     });
 };
@@ -11,46 +19,11 @@ var checkUserLoginState = function(cb) {
 var doLogin = function(baseUrl, afterFuntion) {
     checkUserLoginState(function(r) {
         if (!r.IsAuthenticated) {
-            $.ajax({
-                url: baseUrl + "/showLogin.html",
-                async:false,
-                type:"GET",
-                success:function(data) {
-                    if(data) {
-                        var login_div = $('#login_div');
-                        if (login_div.length == 0) {
-                            $('body').append('<div id="login_div"></div>');
-                        }
-                        $('#login_div').html(data);
-                    }
-                }
-            });
-            loginSetting = function() {
-                checkUserLoginState(function(r) {
-                    if (!r.IsAuthenticated) {
-                        if (getCookie("mallUser") != null) {
-                            $("#headerUsername").text(r.Unick).show();
-                        }
-                        $("#cur_login_user").val("");
-                        $(".no_login_li").show();
-                        $(".has_login_li").hide();
-                    } else {
-                        if (r.Unick != null && r.Unick != "") {
-                            $("#headerUsername").text(r.Unick).show();
-                        } else {
-                            $("#headerUsername").text(r.Name).show();
-                        }
-                        $("#cur_login_user").val(r.UserPin);
-                        $(".has_login_li").show();
-                        $(".no_login_li").hide();
-                        afterFuntion();
-                    }
-                });
-            };
+           alert('请登录');
         } else {
             afterFuntion();
         }
-    });
+    },baseUrl);
 };
 // 添加Cookie
 function addCookie(name, value, options) {

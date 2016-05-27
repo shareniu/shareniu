@@ -38,6 +38,11 @@ public class UserController {
 		userService.add(userPo);
 		return "success";
 	}
+	@RequestMapping("/userinfo/getUserInfo")
+	public String userinfo(){
+
+		return "userinfo/userinfo";
+	}
 	/**
 	 * 注册
 	 */

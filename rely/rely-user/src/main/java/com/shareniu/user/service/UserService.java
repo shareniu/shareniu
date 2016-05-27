@@ -4,7 +4,6 @@
 package com.shareniu.user.service;
 
 import com.shareniu.user.enums.EnumUsernameType;
-import com.shareniu.user.po.MemUserLoginPo;
 import com.shareniu.user.po.UserPo;
 
 /**
@@ -39,7 +38,8 @@ public interface UserService {
 	 */
 	public void getByConf(UserPo user);
 
-	public MemUserLoginPo queryUserByName(String loginName,
+	public UserPo queryUserByName(String loginName,
 			EnumUsernameType usernameType);
-	
+	public UserPo getUser(String loginName);
+	public void clearPassword(UserPo user);
 }

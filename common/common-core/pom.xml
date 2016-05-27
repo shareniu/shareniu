@@ -146,6 +146,17 @@
 			        <groupId>redis.clients</groupId>
 			        <artifactId>jedis</artifactId>
 			      </dependency>
+
+		<!-- json解析工具包 -->
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-asl</artifactId>
+		</dependency>
+		<!-- json -->
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+		</dependency>
 	</dependencies>
 
 </project>

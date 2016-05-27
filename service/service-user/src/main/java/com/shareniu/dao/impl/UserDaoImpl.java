@@ -45,7 +45,7 @@ public class UserDaoImpl implements UserDao{
 	 */
 	public void deleteUserByConf(UserPo userPo) {
 		UserEntity user=new UserEntity();
-		user.setId(userPo.getUserId());
+		user.setId(userPo.getId());
 		userEdt.deleteTUser(user);
 	}
 	/**

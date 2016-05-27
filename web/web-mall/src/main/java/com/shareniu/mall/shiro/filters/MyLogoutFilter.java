@@ -1,5 +1,6 @@
 package com.shareniu.mall.shiro.filters;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import com.shareniu.user.po.UserPo;
  */
 public class MyLogoutFilter extends LogoutFilter {
 
+    @Resource
     private RedisSessionManager redisSessionManager;
 
     /** JSESSIONID COOKIE名称2 */
@@ -29,8 +31,6 @@ public class MyLogoutFilter extends LogoutFilter {
                 redisSessionManager.invalidate(sessionId);
             }
         }
-        WebUtils.removeCookie((HttpServletRequest)request, (HttpServletResponse)response, UserPo.USERPIN_COOKIE_NAME);
-        WebUtils.removeCookie((HttpServletRequest)request, (HttpServletResponse)response, UserPo.USER_COOKIE_NAME);
         return super.preHandle(request, response);
     }
 

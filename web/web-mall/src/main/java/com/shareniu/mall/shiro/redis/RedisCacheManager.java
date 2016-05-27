@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import com.shareniu.common.cache.redis.RedisClientTemplate;
 
+import javax.annotation.Resource;
+
 /**
  * @author zyw
  * @version 1.0
@@ -20,6 +22,8 @@ public class RedisCacheManager extends AbstractCacheManager {
 
     private String keyPrefix = "shiro_redis_cache:";
 
+
+    @Resource
     private RedisClientTemplate redisClientTemplate;
 
     private int expire;

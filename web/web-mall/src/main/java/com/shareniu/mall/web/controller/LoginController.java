@@ -1,7 +1,7 @@
 package com.shareniu.mall.web.controller;
 
 import com.shareniu.common.utils.WebUtils;
-import com.shareniu.mall.shiro.user.Principal;
+import com.shareniu.mall.shiro.utils.AjaxUtils;
 import com.shareniu.user.po.UserPo;
 import com.shareniu.user.service.UserService;
 import org.apache.shiro.SecurityUtils;
@@ -58,7 +58,7 @@ public class LoginController{
 	 */
 	@RequestMapping("/isLogin")
 	@ResponseBody
-	public Object isLogin(HttpServletRequest request) {
+	public  Object isLogin(HttpServletRequest request,HttpServletResponse response) {
 		boolean isAuthenticated = SecurityUtils.getSubject().isAuthenticated();
 		Map<String, Object> map = new HashMap<String, Object>();
 		Map<String, Object> identify = new HashMap<String, Object>();
@@ -97,18 +97,16 @@ public class LoginController{
 		identify.put("UserPin", userPin);
 		identify.put("IsAuthenticated", isAuthenticated);
 		map.put("Identity", identify);
-		return map;
+		//AjaxUtils.toJson(map, response);
+	   return map;
 	}
 
 	@RequestMapping("/getUserPo")
 	public @ResponseBody UserPo getUserPo() {
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
-			Principal principal = (Principal) subject.getPrincipal();
-			if (principal != null) {
-				UserPo user = new UserPo();
+			UserPo user = (UserPo) subject.getPrincipal();
 				return user;
-			}
 		}
 		return null;
 	}

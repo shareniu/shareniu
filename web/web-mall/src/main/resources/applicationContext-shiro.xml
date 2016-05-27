@@ -5,8 +5,8 @@
 
   <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
     <property name="securityManager" ref="securityManager"/>
-    <property name="loginUrl" value="/login.jsp"/>
-    <property name="successUrl" value="/index/main.html"/>
+    <property name="loginUrl" value="/views/login.jsp"/>
+    <property name="successUrl" value="/views/index.jsp"/>
     <property name="unauthorizedUrl" value="/common/unauthorized.j"/>
     <property name="filters">
       <map>
@@ -17,10 +17,8 @@
     <property name="filterChainDefinitions">
       <value>
         /res/** = anon
-        /common/captcha.j = anon
-        /**/upload_file_b.aj = anon
         /logout.html = logout
-        /login.jsp = authc
+        /views/login.jsp = authc
         /userinfo/** = authc
       </value>
     </property>
@@ -35,16 +33,14 @@
   <bean class="com.shareniu.mall.shiro.realm.UserRealm" id="userRealm">
     <property name="credentialsMatcher" ref="credentialsMatcher"/>
     <property name="cachingEnabled" value="false"/>
-    <property name="userProvider" ref="userProviderImpl"/>
   </bean>
 
   <bean class="com.shareniu.mall.shiro.filters.AuthenticationFilter" id="formAuthenticationFilter">
     <property name="usernameParam" value="username"/>
     <property name="passwordParam" value="password"/>
     <property name="callbackKeyAttribute" value="ReturnUrl"/>
-    <property name="loginUrl" value="/login.jsp"/>
+    <property name="loginUrl" value="/views/login.jsp"/>
     <property name="enabled" value="true"/>
-    <property name="userProvider" ref="userProviderImpl"/>
   </bean>
     
   <bean class="org.apache.shiro.web.mgt.DefaultWebSecurityManager" id="securityManager">
@@ -82,7 +78,6 @@
 
   <bean class="com.shareniu.mall.shiro.redis.RedisCacheManager" id="redisCacheManager">
     <property name="expire" value="1800000"/>
-    <property name="redisClientTemplate" ref="redisClientTemplateImpl"/>
   </bean>
 
   <bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>
@@ -93,9 +88,6 @@
   </bean>
 
   <bean id="logoutFilter" class="com.shareniu.mall.shiro.filters.MyLogoutFilter">
-    <property name="redirectUrl" value="/index/main.html"/>
-    <property name="redisSessionManager" ref="redisSessionMangerImpl"/>
+    <property name="redirectUrl" value="/views/login.html"/>
   </bean>
-
-  <bean id="userProviderImpl" class="com.shareniu.mall.shiro.user.DefaultUserProvider"/>
 </beans>
